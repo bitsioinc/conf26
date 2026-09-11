@@ -12,6 +12,10 @@ TA_openrouter/output/
 *.tar.gz
 *.spl
 
+# ...but the published, installable packages ARE tracked. Build outputs stay
+# ignored; only these two release artifacts are committed.
+!prebuilt/*.tar.gz
+
 # Vendored SLIM, installed locally per the build instructions.
 splunk_packaging_toolkit-*/
 

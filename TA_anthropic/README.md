@@ -68,9 +68,11 @@ Two caveats this script does **not** protect you from, which
 
 ## Installation
 
-1. Install `dist/TA_anthropic-0.1.0.tar.gz` (built above) via Splunk Web →
-   **Apps → Manage Apps → Install app from file**, or extract it into
-   `$SPLUNK_HOME/etc/apps/`.
+1. Install the package via Splunk Web → **Apps → Manage Apps → Install app
+   from file**, or extract it into `$SPLUNK_HOME/etc/apps/`. Use either
+   `dist/TA_anthropic-0.1.0.tar.gz` (built above) or the committed
+   `prebuilt/TA_anthropic-0.1.0.tar.gz`, which needs no build toolchain —
+   note the macOS caveat in `prebuilt/README.md`.
 2. Restart splunkd.
 3. Splunk Web → **Anthropic Add-on for Splunk → Configuration → Account** →
    add an account: a name, the Admin API key, and the API base URL

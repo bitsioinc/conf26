@@ -71,7 +71,11 @@ below run from the repo root.
 
 ## Installation
 
-1. Install the package built above, `dist/TA_openrouter-0.1.0.tar.gz`.
+1. Install the package built above, `dist/TA_openrouter-0.1.0.tar.gz`. To skip
+   the build entirely, use the committed `prebuilt/TA_openrouter-0.1.0.tar.gz`
+   instead — see `prebuilt/README.md`, which documents the macOS-built native
+   dependencies and when you should build on your own platform rather than use
+   it.
 2. Restart Splunk.
 3. **Configuration → Account** — add an account with your management key.
    Leave the base URL at `https://openrouter.ai/api/v1` (point it at a local

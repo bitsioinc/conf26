@@ -18,6 +18,26 @@ Both are independent deliverables sharing one `.venv` and one
 `requirements-dev.txt` at the repo root. **202 tests** cover them (58 + 144) and
 run in about five seconds with no Splunk installed.
 
+## Try the add-ons without building anything
+
+Installable packages for both are committed under
+**[`prebuilt/`](prebuilt/README.md)**:
+
+| Package | Add-on |
+| --- | --- |
+| `prebuilt/TA_anthropic-0.1.0.tar.gz` | Anthropic |
+| `prebuilt/TA_openrouter-0.1.0.tar.gz` | OpenRouter |
+
+Verify with `shasum -a 256 -c prebuilt/SHA256SUMS`, then Splunk Web → **Apps →
+Manage Apps → Install app from file** → restart Splunk. Start the matching mock
+server below and you have a working end-to-end ingest with no vendor API key.
+
+> **These were built on macOS.** Four vendored *transitive* dependencies are
+> Mach-O native extensions, none of which either add-on imports — so the
+> packages are expected to work on Linux, but that is untested. For a Linux or
+> production install, build on your target platform. `prebuilt/README.md` has
+> the full accounting.
+
 ## Quick start
 
 ```bash
@@ -122,6 +142,7 @@ mockserver/            offline FastAPI replay of the Anthropic Admin API
 tests/                 TA_anthropic + Anthropic mock tests (58)
 demo/                  the on-stage prompt and the run-of-show runbook
 docs/superpowers/      design specs and implementation plans
+prebuilt/              installable .tar.gz for both add-ons, plus SHA256SUMS
 scripts/               TA_anthropic build, fixture recorder, preflight checks
 splunk/.env.example    credential template; splunk/.env* is git-ignored
 ```
