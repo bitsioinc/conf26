@@ -1,0 +1,10 @@
+<nav search_view="search" color="#65A637">
+  <view name="configuration" default="true" />
+  <view name="inputs" />
+  <collection label="Dashboards">
+    <view name="openrouter_model_mix" />
+    <view name="openrouter_provider_routing" />
+    <view name="openrouter_key_governance" />
+  </collection>
+  <view name="search" />
+</nav>

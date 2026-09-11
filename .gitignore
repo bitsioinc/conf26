@@ -1,0 +1,29 @@
+.DS_Store
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Build outputs. Both add-ons build into dist/; ucc-gen stages into output/.
+.venv/
+dist/
+output/
+TA_anthropic/output/
+TA_openrouter/output/
+*.tar.gz
+*.spl
+
+# Vendored SLIM, installed locally per the build instructions.
+splunk_packaging_toolkit-*/
+
+# Credentials. Only the example file is tracked.
+splunk/.env*
+!splunk/.env.example
+
+# Recorded raw API responses may contain real account identifiers.
+mockserver/fixtures/raw_*
+TA_openrouter/openrouter_mockserver/fixtures/raw_*
+
+# The conference deck and its source template are not published here.
+deck/
+*.pptx
+*.docx

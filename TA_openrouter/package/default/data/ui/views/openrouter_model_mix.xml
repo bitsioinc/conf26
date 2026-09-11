@@ -1,0 +1,81 @@
+<form version="1.1" theme="light">
+  <label>OpenRouter - Model Mix &amp; Spend</label>
+  <description>Which models are being used, and what each costs.</description>
+  <fieldset submitButton="false">
+    <input type="time" token="time_range">
+      <label>Time Range</label>
+      <default>
+        <earliest>-7d@d</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>Spend by model (USD/hour)</title>
+      <chart>
+        <search>
+          <query>`openrouter_index` sourcetype=openrouter:analytics | timechart span=1h sum(total_usage_usd) by model</query>
+          <earliest>$time_range.earliest$</earliest>
+          <latest>$time_range.latest$</latest>
+        </search>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.axisTitleY.text">USD</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Token volume by model (prompt + completion)</title>
+      <description>Prompt and Completion are disjoint and already sum to each model's tokens_total (verified against the committed fixture: 28/28 rows satisfy tokens_prompt + tokens_completion == tokens_total) -- the stacked total below matches "Top models"' sum(tokens_total) exactly. Reasoning and cached tokens are not stacked here because they are components of Completion and Prompt respectively, not additional token categories -- see "Reasoning &amp; cached tokens (components)" below.</description>
+      <chart>
+        <search>
+          <query>`openrouter_index` sourcetype=openrouter:analytics | stats sum(tokens_prompt) as Prompt sum(tokens_completion) as Completion by model</query>
+          <earliest>$time_range.earliest$</earliest>
+          <latest>$time_range.latest$</latest>
+        </search>
+        <option name="charting.chart">bar</option>
+        <option name="charting.chart.stackMode">stacked</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Top models</title>
+      <table>
+        <search>
+          <query>`openrouter_index` sourcetype=openrouter:analytics | stats sum(request_count) as requests sum(tokens_total) as tokens sum(total_usage_usd) as spend_usd by model | eval usd_per_request=round(spend_usd/requests,6) | sort - spend_usd</query>
+          <earliest>$time_range.earliest$</earliest>
+          <latest>$time_range.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Reasoning &amp; cached tokens by model (components, not additional volume)</title>
+      <description>reasoning_tokens never exceeds tokens_completion and cached_tokens never exceeds tokens_prompt in the committed fixture -- both are subsets of the Prompt/Completion totals in the panel above, not extra tokens. Shown side by side (not stacked, and not stacked with the panel above) so this view cannot be misread as adding to the token total; docs/operations.md's cached_tokens/tokens_prompt cache-hit-rate proxy only holds if cached is read this way.</description>
+      <chart>
+        <search>
+          <query>`openrouter_index` sourcetype=openrouter:analytics | stats sum(reasoning_tokens) as Reasoning sum(cached_tokens) as Cached by model</query>
+          <earliest>$time_range.earliest$</earliest>
+          <latest>$time_range.latest$</latest>
+        </search>
+        <option name="charting.chart">bar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Model mix per API key</title>
+      <table>
+        <search>
+          <query>`openrouter_index` sourcetype=openrouter:analytics | stats sum(total_usage_usd) as spend_usd by api_key_id model | sort - spend_usd</query>
+          <earliest>$time_range.earliest$</earliest>
+          <latest>$time_range.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+</form>

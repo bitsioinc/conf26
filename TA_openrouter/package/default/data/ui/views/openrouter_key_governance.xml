@@ -1,0 +1,54 @@
+<form version="1.1" theme="light">
+  <label>OpenRouter - Key Governance</label>
+  <description>API key inventory and unrecognised key activity.</description>
+  <fieldset submitButton="false">
+    <input type="time" token="time_range">
+      <label>Time Range</label>
+      <default>
+        <earliest>-7d@d</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>Unrecognised keys (active but not in baseline)</title>
+      <description>Joins analytics traffic to the sanctioned-key baseline lookup by name -- OpenRouter's analytics endpoints identify a key by its human-readable name in api_key_id, never by the roster's hash (verified against live data, see docs/schema-verification.md). A hit here is a key that produced traffic but has no match in openrouter_key_baseline.csv.</description>
+      <table>
+        <search>
+          <query>`openrouter_index` sourcetype=openrouter:analytics | stats sum(total_usage_usd) as spend_usd sum(request_count) as requests values(model) as models by api_key_id | lookup openrouter_key_baseline api_key_id OUTPUT name as baseline_name | where isnull(baseline_name) | table api_key_id spend_usd requests models</query>
+          <earliest>$time_range.earliest$</earliest>
+          <latest>$time_range.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>API key roster</title>
+      <table>
+        <search>
+          <query>`openrouter_index` sourcetype=openrouter:keys | stats latest(name) as name latest(label) as label latest(disabled) as disabled latest(created_at) as created latest(limit_usd) as limit_usd latest(limit_remaining_usd) as remaining_usd latest(usage_usd) as usage_usd by hash | sort - usage_usd</query>
+          <earliest>$time_range.earliest$</earliest>
+          <latest>$time_range.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Spend by key (USD/hour)</title>
+      <chart>
+        <search>
+          <query>`openrouter_index` sourcetype=openrouter:analytics | timechart span=1h sum(total_usage_usd) by api_key_id</query>
+          <earliest>$time_range.earliest$</earliest>
+          <latest>$time_range.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.axisTitleY.text">USD</option>
+      </chart>
+    </panel>
+  </row>
+</form>

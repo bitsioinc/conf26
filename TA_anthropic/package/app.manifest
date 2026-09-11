@@ -1,0 +1,57 @@
+{
+    "schemaVersion": "2.0.0",
+    "info": {
+        "title": "Anthropic Add-on for Splunk",
+        "id": {
+            "group": null,
+            "name": "TA_anthropic",
+            "version": "0.1.0"
+        },
+        "author": [
+            {
+                "name": "bitsIO Inc",
+                "email": null,
+                "company": "bitsIO Inc"
+            }
+        ],
+        "releaseDate": "2026-09-11",
+        "description": "Ingests organization-level usage and cost telemetry from the Anthropic Admin API into Splunk: token usage by model, workspace and API key, daily cost, and the user and API-key directory.",
+        "classification": {
+            "intendedAudience": "IT Professionals",
+            "categories": [
+                "Security, Fraud & Compliance"
+            ],
+            "developmentStatus": "Development/Beta"
+        },
+        "commonInformationModels": null,
+        "license": {
+            "name": "Apache-2.0",
+            "text": "./LICENSES/LICENSE.txt",
+            "uri": null
+        },
+        "privacyPolicy": {
+            "name": null,
+            "text": null,
+            "uri": null
+        },
+        "releaseNotes": {
+            "name": "README",
+            "text": "README.txt",
+            "uri": ""
+        }
+    },
+    "dependencies": null,
+    "tasks": null,
+    "inputGroups": null,
+    "incompatibleApps": null,
+    "platformRequirements": null,
+    "supportedDeployments": [
+        "_standalone",
+        "_distributed",
+        "_search_head_clustering"
+    ],
+    "targetWorkloads": [
+        "_search_heads",
+        "_indexers"
+    ]
+}

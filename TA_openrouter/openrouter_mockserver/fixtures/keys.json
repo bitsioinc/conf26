@@ -1,0 +1,50 @@
+{
+  "data": [
+    {
+      "hash": "1fa2fa8bd300d812da7e0302a2c6a6c9b076813b9600146f652c42bb8dc06b39",
+      "name": "Alpaca",
+      "label": "sk-or-v1-syn...001",
+      "disabled": false,
+      "limit": 25,
+      "limit_remaining": 24.987111063,
+      "limit_reset": null,
+      "include_byok_in_limit": false,
+      "usage": 0.012888937,
+      "usage_daily": 0.012888937,
+      "usage_weekly": 0.012888937,
+      "usage_monthly": 0.012888937,
+      "byok_usage": 0,
+      "byok_usage_daily": 0,
+      "byok_usage_weekly": 0,
+      "byok_usage_monthly": 0,
+      "created_at": "2026-05-04T20:39:44.880Z",
+      "updated_at": null,
+      "expires_at": null,
+      "creator_user_id": "user_SYNTHETICFIXTUREUSER0000001",
+      "workspace_id": "00000000-0000-4000-8000-000000000001"
+    },
+    {
+      "hash": "2d58ecd7c7b3c952bbfc3598d44e20ea854b63b9a0ca26ba5281ddaf9afa76da",
+      "name": "Nimbus_Prod_Key",
+      "label": "sk-or-v1-9c4...b12",
+      "disabled": false,
+      "limit": 150,
+      "limit_remaining": 21.5529,
+      "limit_reset": null,
+      "include_byok_in_limit": false,
+      "usage": 128.4471,
+      "usage_daily": 0.9012,
+      "usage_weekly": 12.735,
+      "usage_monthly": 46.2283,
+      "byok_usage": 0,
+      "byok_usage_daily": 0,
+      "byok_usage_weekly": 0,
+      "byok_usage_monthly": 0,
+      "created_at": "2026-04-15T09:12:03.441Z",
+      "updated_at": "2026-07-30T11:03:47.220Z",
+      "expires_at": null,
+      "creator_user_id": "user_SYNTHETICFIXTUREUSER0000001",
+      "workspace_id": "00000000-0000-4000-8000-000000000001"
+    }
+  ]
+}

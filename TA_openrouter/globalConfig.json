@@ -1,0 +1,145 @@
+{
+  "meta": {
+    "name": "TA_openrouter",
+    "restRoot": "TA_openrouter",
+    "version": "0.1.0",
+    "displayName": "OpenRouter Add-on for Splunk",
+    "schemaVersion": "0.0.10",
+    "supportedThemes": ["light", "dark"]
+  },
+  "pages": {
+    "configuration": {
+      "title": "Configuration",
+      "description": "Configure your OpenRouter management credential",
+      "tabs": [
+        {
+          "name": "account",
+          "title": "Account",
+          "table": {
+            "header": [
+              {"field": "name", "label": "Name"},
+              {"field": "api_base_url", "label": "Base URL"}
+            ],
+            "actions": ["edit", "delete", "clone"]
+          },
+          "entity": [
+            {
+              "type": "text",
+              "label": "Name",
+              "field": "name",
+              "help": "Unique name for this account",
+              "required": true,
+              "validators": [
+                {"type": "regex", "pattern": "^[a-zA-Z]\\w*$",
+                 "errorMsg": "Name must start with a letter and contain only letters, numbers and underscores"},
+                {"type": "string", "minLength": 1, "maxLength": 50,
+                 "errorMsg": "Length of Name should be between 1 and 50"}
+              ]
+            },
+            {
+              "type": "text",
+              "label": "Management API Key",
+              "field": "api_key",
+              "encrypted": true,
+              "required": true,
+              "help": "Create one at https://openrouter.ai/settings/management-keys. Management keys share the sk-or-v1- prefix with ordinary inference keys, so verify you copied it from the management-keys page."
+            },
+            {
+              "type": "text",
+              "label": "API Base URL",
+              "field": "api_base_url",
+              "required": true,
+              "defaultValue": "https://openrouter.ai/api/v1",
+              "help": "Point at a local mock server for offline testing"
+            }
+          ]
+        },
+        {
+          "name": "logging",
+          "title": "Logging",
+          "entity": [
+            {
+              "type": "singleSelect",
+              "label": "Log level",
+              "field": "loglevel",
+              "defaultValue": "INFO",
+              "options": {
+                "disableSearch": true,
+                "autoCompleteFields": [
+                  {"value": "DEBUG", "label": "DEBUG"},
+                  {"value": "INFO", "label": "INFO"},
+                  {"value": "WARNING", "label": "WARNING"},
+                  {"value": "ERROR", "label": "ERROR"},
+                  {"value": "CRITICAL", "label": "CRITICAL"}
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "inputs": {
+      "title": "Inputs",
+      "description": "Collect OpenRouter analytics and API key inventory",
+      "table": {
+        "header": [
+          {"field": "name", "label": "Name"},
+          {"field": "interval", "label": "Interval"},
+          {"field": "index", "label": "Index"},
+          {"field": "disabled", "label": "Status"}
+        ],
+        "moreInfo": [
+          {"field": "name", "label": "Name"},
+          {"field": "interval", "label": "Interval"},
+          {"field": "index", "label": "Index"},
+          {"field": "account", "label": "Account"}
+        ],
+        "actions": ["edit", "delete", "clone"]
+      },
+      "services": [
+        {
+          "name": "openrouter_analytics",
+          "title": "Analytics",
+          "entity": [
+            {"type": "text", "label": "Name", "field": "name", "required": true,
+             "validators": [{"type": "regex", "pattern": "^[a-zA-Z]\\w*$",
+                             "errorMsg": "Name must start with a letter and contain only letters, numbers and underscores"}]},
+            {"type": "interval", "label": "Interval", "field": "interval",
+             "defaultValue": "3600", "required": true,
+             "help": "Seconds between collections. Analytics buckets are hourly."},
+            {"type": "singleSelect", "label": "Index", "field": "index",
+             "defaultValue": "default", "required": true,
+             "options": {"endpointUrl": "data/indexes", "createSearchChoice": true}},
+            {"type": "singleSelect", "label": "Account", "field": "account",
+             "required": true,
+             "options": {"referenceName": "account"}},
+            {"type": "text", "label": "Backfill days", "field": "backfill_days",
+             "defaultValue": "7", "required": false,
+             "help": "First run only. Whole number from 1 to 30.",
+             "validators": [{"type": "number", "range": [1, 30], "isInteger": true,
+                             "errorMsg": "Backfill days must be a whole number between 1 and 30"}]}
+          ],
+          "inputHelperModule": "openrouter_analytics_helper"
+        },
+        {
+          "name": "openrouter_keys",
+          "title": "API Keys",
+          "entity": [
+            {"type": "text", "label": "Name", "field": "name", "required": true,
+             "validators": [{"type": "regex", "pattern": "^[a-zA-Z]\\w*$",
+                             "errorMsg": "Name must start with a letter and contain only letters, numbers and underscores"}]},
+            {"type": "interval", "label": "Interval", "field": "interval",
+             "defaultValue": "3600", "required": true},
+            {"type": "singleSelect", "label": "Index", "field": "index",
+             "defaultValue": "default", "required": true,
+             "options": {"endpointUrl": "data/indexes", "createSearchChoice": true}},
+            {"type": "singleSelect", "label": "Account", "field": "account",
+             "required": true,
+             "options": {"referenceName": "account"}}
+          ],
+          "inputHelperModule": "openrouter_keys_helper"
+        }
+      ]
+    }
+  }
+}

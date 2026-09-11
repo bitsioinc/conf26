@@ -1,0 +1,13 @@
+{
+  "data": [
+    {"id": "apikey_demo_ci", "type": "api_key", "name": "ci-pipeline",
+     "workspace_id": "wrkspc_demo_platform", "created_at": "2026-01-15T10:00:00Z",
+     "partial_key_hint": "sk-ant-api03-R2D...igAA", "status": "active"},
+    {"id": "apikey_demo_claudecode", "type": "api_key", "name": "claude-code-team",
+     "workspace_id": "wrkspc_demo_eng", "created_at": "2026-03-02T09:30:00Z",
+     "partial_key_hint": "sk-ant-api03-C3P...o0AA", "status": "active"}
+  ],
+  "has_more": false,
+  "first_id": "apikey_demo_ci",
+  "last_id": "apikey_demo_claudecode"
+}

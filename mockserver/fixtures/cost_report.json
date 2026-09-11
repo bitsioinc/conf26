@@ -1,0 +1,54 @@
+{
+  "data": [
+    {
+      "starting_at": "2026-07-27T00:00:00Z",
+      "ending_at": "2026-07-28T00:00:00Z",
+      "results": [
+        {
+          "amount": "41250.00",
+          "context_window": "0-200k",
+          "cost_type": "tokens",
+          "currency": "USD",
+          "description": "Claude Fable 5 Usage - Output Tokens",
+          "inference_geo": null,
+          "model": "claude-fable-5",
+          "service_tier": "standard",
+          "token_type": "output_tokens",
+          "workspace_id": "wrkspc_demo_eng"
+        },
+        {
+          "amount": "9375.00",
+          "context_window": "0-200k",
+          "cost_type": "tokens",
+          "currency": "USD",
+          "description": "Claude Opus 5 Usage - Input Tokens",
+          "inference_geo": null,
+          "model": "claude-opus-5",
+          "service_tier": "standard",
+          "token_type": "uncached_input_tokens",
+          "workspace_id": "wrkspc_demo_platform"
+        }
+      ]
+    },
+    {
+      "starting_at": "2026-07-28T00:00:00Z",
+      "ending_at": "2026-07-29T00:00:00Z",
+      "results": [
+        {
+          "amount": "48720.00",
+          "context_window": "0-200k",
+          "cost_type": "tokens",
+          "currency": "USD",
+          "description": "Claude Fable 5 Usage - Output Tokens",
+          "inference_geo": null,
+          "model": "claude-fable-5",
+          "service_tier": "standard",
+          "token_type": "output_tokens",
+          "workspace_id": "wrkspc_demo_eng"
+        }
+      ]
+    }
+  ],
+  "has_more": false,
+  "next_page": null
+}

@@ -1,0 +1,11 @@
+{
+  "data": [
+    {"id": "user_demo_admin", "type": "user", "email": "admin@example.com",
+     "name": "Demo Admin", "role": "admin", "added_at": "2026-01-10T08:00:00Z"},
+    {"id": "user_demo_dev", "type": "user", "email": "dev@example.com",
+     "name": "Demo Developer", "role": "developer", "added_at": "2026-02-20T12:00:00Z"}
+  ],
+  "has_more": false,
+  "first_id": "user_demo_admin",
+  "last_id": "user_demo_dev"
+}

@@ -1,0 +1,4 @@
+splunktaucclib
+solnlib
+splunk-sdk
+requests

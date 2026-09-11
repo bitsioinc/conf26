@@ -1,0 +1,334 @@
+{
+  "data": {
+    "metrics": [
+      {
+        "name": "request_count",
+        "display_label": "Request Count",
+        "is_rate": false,
+        "display_format": "number"
+      },
+      {
+        "name": "total_usage",
+        "display_label": "Total Usage ($)",
+        "is_rate": false,
+        "display_format": "currency"
+      },
+      {
+        "name": "tokens_total",
+        "display_label": "Tokens (Total)",
+        "is_rate": false,
+        "display_format": "number"
+      },
+      {
+        "name": "tokens_prompt",
+        "display_label": "Tokens (Prompt)",
+        "is_rate": false,
+        "display_format": "number"
+      },
+      {
+        "name": "tokens_completion",
+        "display_label": "Tokens (Completion)",
+        "is_rate": false,
+        "display_format": "number"
+      },
+      {
+        "name": "reasoning_tokens",
+        "display_label": "Reasoning Tokens",
+        "is_rate": false,
+        "display_format": "number"
+      },
+      {
+        "name": "cached_tokens",
+        "display_label": "Cached Tokens",
+        "is_rate": false,
+        "display_format": "number"
+      },
+      {
+        "name": "avg_latency",
+        "display_label": "Avg Latency",
+        "is_rate": true,
+        "display_format": "latency"
+      },
+      {
+        "name": "p50_latency",
+        "display_label": "P50 Latency",
+        "is_rate": true,
+        "display_format": "latency"
+      },
+      {
+        "name": "p90_latency",
+        "display_label": "P90 Latency",
+        "is_rate": true,
+        "display_format": "latency"
+      },
+      {
+        "name": "p99_latency",
+        "display_label": "P99 Latency",
+        "is_rate": true,
+        "display_format": "latency"
+      },
+      {
+        "name": "cache_hit_rate",
+        "display_label": "Cache Hit Rate",
+        "is_rate": true,
+        "display_format": "percent"
+      },
+      {
+        "name": "blended_cost_per_million_tokens",
+        "display_label": "Blended Cost ($/1M Tokens)",
+        "is_rate": true,
+        "display_format": "currency"
+      },
+      {
+        "name": "avg_throughput",
+        "display_label": "Avg Throughput (tok/s)",
+        "is_rate": true,
+        "display_format": "throughput"
+      },
+      {
+        "name": "p50_throughput",
+        "display_label": "P50 Throughput (tok/s)",
+        "is_rate": true,
+        "display_format": "throughput"
+      },
+      {
+        "name": "p90_throughput",
+        "display_label": "P90 Throughput (tok/s)",
+        "is_rate": true,
+        "display_format": "throughput"
+      },
+      {
+        "name": "p99_throughput",
+        "display_label": "P99 Throughput (tok/s)",
+        "is_rate": true,
+        "display_format": "throughput"
+      },
+      {
+        "name": "guardrail_invoked_count",
+        "display_label": "Guardrail Invoked (Count)",
+        "is_rate": false,
+        "display_format": "number"
+      },
+      {
+        "name": "guardrail_invoked_rate",
+        "display_label": "Guardrail Invoked Rate",
+        "is_rate": true,
+        "display_format": "percent"
+      },
+      {
+        "name": "response_cached_count",
+        "display_label": "Response Cached (Count)",
+        "is_rate": false,
+        "display_format": "number"
+      },
+      {
+        "name": "response_cached_rate",
+        "display_label": "Response Cached Rate",
+        "is_rate": true,
+        "display_format": "percent"
+      },
+      {
+        "name": "byok_usage",
+        "display_label": "BYOK Usage ($)",
+        "is_rate": false,
+        "display_format": "currency"
+      },
+      {
+        "name": "credits_usage",
+        "display_label": "Credits Usage ($)",
+        "is_rate": false,
+        "display_format": "currency"
+      },
+      {
+        "name": "openrouter_usage",
+        "display_label": "OpenRouter Usage ($)",
+        "is_rate": false,
+        "display_format": "currency"
+      },
+      {
+        "name": "byok_fees",
+        "display_label": "BYOK Fees ($)",
+        "is_rate": false,
+        "display_format": "currency"
+      },
+      {
+        "name": "byok_request_count",
+        "display_label": "BYOK Requests",
+        "is_rate": false,
+        "display_format": "number"
+      },
+      {
+        "name": "usage_upstream",
+        "display_label": "Upstream Usage ($)",
+        "is_rate": false,
+        "display_format": "currency"
+      },
+      {
+        "name": "usage_cache",
+        "display_label": "Cache Usage ($)",
+        "is_rate": false,
+        "display_format": "currency"
+      },
+      {
+        "name": "usage_data",
+        "display_label": "Data Logging Discount ($)",
+        "is_rate": false,
+        "display_format": "currency"
+      },
+      {
+        "name": "usage_web",
+        "display_label": "Web Search Usage ($)",
+        "is_rate": false,
+        "display_format": "currency"
+      },
+      {
+        "name": "usage_upstream_web",
+        "display_label": "Upstream Web Search Usage ($)",
+        "is_rate": false,
+        "display_format": "currency"
+      },
+      {
+        "name": "usage_file",
+        "display_label": "File Usage ($)",
+        "is_rate": false,
+        "display_format": "currency"
+      },
+      {
+        "name": "usage_upstream_file",
+        "display_label": "Upstream File Usage ($)",
+        "is_rate": false,
+        "display_format": "currency"
+      },
+      {
+        "name": "usage_web_fetch",
+        "display_label": "Web Fetch Usage ($)",
+        "is_rate": false,
+        "display_format": "currency"
+      },
+      {
+        "name": "usage_upstream_web_fetch",
+        "display_label": "Upstream Web Fetch Usage ($)",
+        "is_rate": false,
+        "display_format": "currency"
+      }
+    ],
+    "dimensions": [
+      {
+        "name": "model",
+        "display_label": "Model"
+      },
+      {
+        "name": "variant",
+        "display_label": "Variant"
+      },
+      {
+        "name": "api_key_id",
+        "display_label": "API Key"
+      },
+      {
+        "name": "provider",
+        "display_label": "Provider"
+      },
+      {
+        "name": "origin",
+        "display_label": "Origin"
+      },
+      {
+        "name": "country",
+        "display_label": "Country"
+      },
+      {
+        "name": "data_region",
+        "display_label": "Region"
+      },
+      {
+        "name": "finish_reason",
+        "display_label": "Finish Reason"
+      },
+      {
+        "name": "workspace",
+        "display_label": "Workspace"
+      },
+      {
+        "name": "app",
+        "display_label": "App"
+      },
+      {
+        "name": "user",
+        "display_label": "User"
+      },
+      {
+        "name": "external_user",
+        "display_label": "Custom User ID"
+      },
+      {
+        "name": "context_length_bucket",
+        "display_label": "Context Length"
+      },
+      {
+        "name": "generation_id",
+        "display_label": "Generation ID"
+      },
+      {
+        "name": "session_id",
+        "display_label": "Session ID"
+      }
+    ],
+    "operators": [
+      {
+        "name": "eq",
+        "value_type": "scalar"
+      },
+      {
+        "name": "neq",
+        "value_type": "scalar"
+      },
+      {
+        "name": "in",
+        "value_type": "array"
+      },
+      {
+        "name": "not_in",
+        "value_type": "array"
+      },
+      {
+        "name": "gt",
+        "value_type": "scalar"
+      },
+      {
+        "name": "gte",
+        "value_type": "scalar"
+      },
+      {
+        "name": "lt",
+        "value_type": "scalar"
+      },
+      {
+        "name": "lte",
+        "value_type": "scalar"
+      }
+    ],
+    "granularities": [
+      {
+        "name": "minute",
+        "display_label": "Minute"
+      },
+      {
+        "name": "hour",
+        "display_label": "Hour"
+      },
+      {
+        "name": "day",
+        "display_label": "Day"
+      },
+      {
+        "name": "week",
+        "display_label": "Week"
+      },
+      {
+        "name": "month",
+        "display_label": "Month"
+      }
+    ]
+  }
+}

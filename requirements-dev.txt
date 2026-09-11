@@ -1,0 +1,6 @@
+splunk-add-on-ucc-framework   # provides the ucc-gen CLI
+fastapi                       # the two offline mock servers
+uvicorn
+httpx
+pytest
+requests

@@ -1,0 +1,53 @@
+<form version="1.1" theme="light">
+  <label>OpenRouter - Provider Routing</label>
+  <description>Which upstream providers served each model, and at what cost.</description>
+  <fieldset submitButton="false">
+    <input type="time" token="time_range">
+      <label>Time Range</label>
+      <default>
+        <earliest>-7d@d</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>Spend share by provider (USD/hour)</title>
+      <chart>
+        <search>
+          <query>`openrouter_index` sourcetype=openrouter:providers | timechart span=1h sum(total_usage_usd) by provider</query>
+          <earliest>$time_range.earliest$</earliest>
+          <latest>$time_range.latest$</latest>
+        </search>
+        <option name="charting.chart">area</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.axisTitleY.text">USD</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Provider by model</title>
+      <table>
+        <search>
+          <query>`openrouter_index` sourcetype=openrouter:providers | stats sum(request_count) as requests sum(total_usage_usd) as spend_usd by model provider | sort model - spend_usd</query>
+          <earliest>$time_range.earliest$</earliest>
+          <latest>$time_range.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+    <panel>
+      <title>Cost per request by provider, same model</title>
+      <description>A routing shift shows up here as a cost change nobody requested.</description>
+      <table>
+        <search>
+          <query>`openrouter_index` sourcetype=openrouter:providers | stats sum(total_usage_usd) as spend_usd sum(request_count) as requests by model provider | where requests>0 | eval usd_per_request=round(spend_usd/requests,6) | eventstats dc(provider) as providers by model | where providers>1 | table model provider requests usd_per_request | sort model - usd_per_request</query>
+          <earliest>$time_range.earliest$</earliest>
+          <latest>$time_range.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+</form>
