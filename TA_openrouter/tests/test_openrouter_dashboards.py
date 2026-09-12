@@ -88,7 +88,19 @@ def test_every_dashboard_has_a_time_picker_and_no_panel_hardcodes_24h():
     # though the data was indexed and correct. Each dashboard must now
     # expose a dashboard-level <input type="time"> bound to a token, every
     # panel's <earliest>/<latest> must reference that token (not a literal),
-    # and the default must be Last 7 days (-7d@d), not Last 24 hours.
+    # and the default must be All time.
+    #
+    # All time, rather than the -7d@d this guard first pinned, because these
+    # dashboards are demonstrated against the mock's fixture replay, whose
+    # buckets are anchored to the hour the mock booted. Under ANY relative
+    # window the panel totals become a function of how long after ingest the
+    # dashboard is opened -- open it late enough and rows age out, and the
+    # figures stop matching the .conf2026 deck screenshots that were captured
+    # from these same panels. All time makes each total a function of what was
+    # ingested and nothing else, which is what keeps the projected slide and
+    # the live instance equal. It also subsumes the sparse-traffic reason
+    # -7d@d existed for: a window that never excludes anything cannot be
+    # empty while data is indexed.
     for path in VIEWS.glob("*.xml"):
         tree = ET.parse(path)
         root = tree.getroot()
@@ -104,12 +116,19 @@ def test_every_dashboard_has_a_time_picker_and_no_panel_hardcodes_24h():
 
         default = time_inputs[0].find("default")
         assert default is not None, "{}: time input has no <default>".format(path.name)
-        assert default.find("earliest").text == "-7d@d", (
-            "{}: time picker must default to Last 7 days (-7d@d), not -24h -- "
-            "the live account's traffic is sparse enough that -24h is "
-            "routinely empty".format(path.name)
+        assert default.find("earliest").text == "0", (
+            "{}: time picker must default to All time (earliest 0) -- a "
+            "relative window makes the panel totals depend on how long after "
+            "ingest the dashboard is opened, which desynchronises the live "
+            "instance from the deck screenshots".format(path.name)
         )
-        assert default.find("latest").text == "now"
+        # ElementTree reports an empty <latest></latest> as text None, and an
+        # empty upper bound is exactly how Simple XML spells All time's open
+        # end. Asserting `== ""` here would fail against correct markup.
+        assert default.find("latest").text is None, (
+            "{}: time picker latest must be empty (All time), not {!r}"
+            .format(path.name, default.find("latest").text)
+        )
 
         for query in root.iter("query"):
             assert "-24h" not in query.text, "{}: {}".format(path.name, query.text[:80])

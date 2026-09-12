@@ -1,29 +1,41 @@
-<dashboard version="1.1" theme="dark">
+<form version="1.1" theme="dark">
   <label>AI Observability &amp; Security</label>
   <description>Anthropic org usage, cost, and anomaly monitoring — ingested by TA_anthropic</description>
+  <fieldset submitButton="false">
+    <input type="time" token="time_range">
+      <label>Time Range</label>
+      <default>
+        <earliest>-7d@d</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
   <row>
     <panel>
       <title>Token Usage Over Time by Model</title>
       <chart>
         <search>
           <query>sourcetype=anthropic:usage | timechart span=1h sum(total_input_tokens) as input sum(output_tokens) as output by model</query>
-          <earliest>-7d</earliest>
-          <latest>now</latest>
+          <earliest>$time_range.earliest$</earliest>
+          <latest>$time_range.latest$</latest>
         </search>
         <option name="charting.chart">column</option>
         <option name="charting.chart.stackMode">stacked</option>
+        <option name="refresh.display">progressbar</option>
       </chart>
     </panel>
     <panel>
       <title>Daily Cost by Workspace (USD)</title>
+      <description>Fixed 30-day window: cost_report only releases completed daily buckets, so the newest cost data is always yesterday. Following the time picker would leave this panel permanently empty on any sub-day range such as Today.</description>
       <chart>
         <search>
           <query>sourcetype=anthropic:cost | eval workspace=coalesce(workspace_id, "default") | timechart span=1d sum(amount_usd) as usd by workspace</query>
-          <earliest>-30d</earliest>
+          <earliest>-30d@d</earliest>
           <latest>now</latest>
         </search>
         <option name="charting.chart">column</option>
         <option name="charting.chart.stackMode">stacked</option>
+        <option name="refresh.display">progressbar</option>
       </chart>
     </panel>
   </row>
@@ -33,13 +45,14 @@
       <single>
         <search>
           <query>sourcetype=anthropic:usage | stats sum(cache_read_input_tokens) as cached sum(total_input_tokens) as total | eval ratio=round(100*cached/total,1) | fields ratio</query>
-          <earliest>-7d</earliest>
-          <latest>now</latest>
+          <earliest>$time_range.earliest$</earliest>
+          <latest>$time_range.latest$</latest>
         </search>
         <option name="unit">%</option>
         <option name="rangeColors">["0xdc4e41","0xf1813f","0x53a051"]</option>
         <option name="rangeValues">[30,60]</option>
         <option name="useColors">1</option>
+        <option name="refresh.display">progressbar</option>
       </single>
     </panel>
     <panel>
@@ -47,9 +60,10 @@
       <table>
         <search>
           <query>sourcetype=anthropic:usage | stats sum(output_tokens) as output_tokens by api_key_id | lookup anthropic_api_key_baseline id as api_key_id OUTPUT name | eval name=coalesce(name, "UNRECOGNIZED") | sort -output_tokens | table name api_key_id output_tokens</query>
-          <earliest>-7d</earliest>
-          <latest>now</latest>
+          <earliest>$time_range.earliest$</earliest>
+          <latest>$time_range.latest$</latest>
         </search>
+        <option name="refresh.display">progressbar</option>
       </table>
     </panel>
     <panel>
@@ -57,10 +71,31 @@
       <table>
         <search>
           <query>sourcetype=anthropic:usage api_key_id=* | stats sum(total_input_tokens) as input_tokens sum(output_tokens) as output_tokens by api_key_id | lookup anthropic_api_key_baseline id as api_key_id OUTPUT name | where isnull(name)</query>
-          <earliest>-7d</earliest>
-          <latest>now</latest>
+          <earliest>$time_range.earliest$</earliest>
+          <latest>$time_range.latest$</latest>
         </search>
+        <option name="refresh.display">progressbar</option>
       </table>
     </panel>
   </row>
-</dashboard>
+  <row>
+    <panel>
+      <title>Output Tokens Over Time by Baseline Status</title>
+      <chart>
+        <search>
+          <query>sourcetype=anthropic:usage api_key_id=* | lookup anthropic_api_key_baseline id as api_key_id OUTPUT name | eval series=if(isnull(name), "Key not in the baseline", "Known API keys") | timechart span=1h sum(output_tokens) as output_tokens by series</query>
+          <earliest>$time_range.earliest$</earliest>
+          <latest>$time_range.latest$</latest>
+        </search>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.axisTitleY.text">Output tokens</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.chart.nullValueMode">zero</option>
+        <option name="charting.fieldColors">{"Known API keys": 0xBBC1C9, "Key not in the baseline": 0xFF007F}</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+</form>

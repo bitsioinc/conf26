@@ -5,8 +5,8 @@
     <input type="time" token="time_range">
       <label>Time Range</label>
       <default>
-        <earliest>-7d@d</earliest>
-        <latest>now</latest>
+        <earliest>0</earliest>
+        <latest></latest>
       </default>
     </input>
   </fieldset>

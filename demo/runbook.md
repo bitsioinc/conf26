@@ -9,7 +9,7 @@ after minute 8.
 | Time | Beat | Machine state |
 |---|---|---|
 | 0–4 | The gap: AI usage invisible; no Anthropic TA on Splunkbase | Slides |
-| 4–8 | LIVE: paste demo/demo_prompt.md into Claude Code | live-build/ dir, network up |
+| 4–8 | LIVE: paste demo/demo_prompt.md into Claude Code | `../<repo>-live-demo/stage/`, network up |
 | 8–14 | Slides: architecture (docs → UCC TA → checkpointed ingest → dashboard) | Claude Code running in background |
 | 14–20 | Reveal: finished TA in Splunk — setup page, events, dashboard, alert fires | localhost:8000, mock on :8081 |
 | 20–22 | QR to repo; "days → minutes" recap | Slides |
@@ -20,15 +20,22 @@ after minute 8.
    instance (username + password). Write them on the same card as the run of
    show. The checkpoint reset below is the only on-stage recovery that needs
    them, and there is no way to do it without them.
-2. `./scripts/build.sh` — fresh `dist/TA_anthropic-*.tar.gz`
-3. Start the mock: `.venv/bin/uvicorn mockserver.app:app --port 8081 &`
+2. `./scripts/stage_live_build.sh` — builds `../<repo>-live-demo/` (an empty
+   `stage/` for the live build, plus `kit/` holding the rescue checkpoints).
+   It lives **outside** this repo on purpose: Claude Code inherits `CLAUDE.md`
+   from every parent directory, and this repo's `CLAUDE.md` names the cents
+   divisor, the `inputHelperModule` trap and the Python 3.9 pin — the
+   discoveries the talk credits to the agent reading the API docs. Read
+   `../<repo>-live-demo/kit/STAGE_CARD.md`; it is the podium card.
+3. `./scripts/build.sh` — fresh `dist/TA_anthropic-*.tar.gz`
+4. Start the mock: `.venv/bin/uvicorn mockserver.app:app --port 8081 &`
    (fixtures time-shift to "now", so the dashboard is never empty)
-4. Install the TA into the local Splunk and restart:
+5. Install the TA into the local Splunk and restart:
    ```bash
    tar -xzf dist/TA_anthropic-*.tar.gz -C /opt/splunk/etc/apps/
    /opt/splunk/bin/splunk restart
    ```
-5. In Splunk Web (http://localhost:8000) → **TA_anthropic → Configuration**:
+6. In Splunk Web (http://localhost:8000) → **TA_anthropic → Configuration**:
    create the account with base URL `http://127.0.0.1:8081` and any dummy Admin
    key, then enable **all three inputs** on the **Inputs** tab:
 
@@ -46,7 +53,7 @@ after minute 8.
    planted rogue one — the centrepiece of the talk silently produces the wrong
    answer, and it looks like it worked.
 
-6. Confirm all three sourcetypes land (give the inputs one interval). **Do not
+7. Confirm all three sourcetypes land (give the inputs one interval). **Do not
    pin an index.** `inputs.conf` ships `index = default` and the Inputs tab lets
    you send the inputs to any index, so on an instance whose `defaultDatabase`
    is something other than `main` a hard-coded index constraint returns zero
@@ -64,7 +71,7 @@ after minute 8.
    the first hour and would send you off fixing a healthy system. Two *distinct*
    key ids is the assertion that stays true forever. Equivalent if you prefer it:
    `sourcetype=anthropic:api_keys | dedup id | stats count` — also **2**.
-7. **Build the baseline by hand — do not wait for the `*/30` cron — and run it
+8. **Build the baseline by hand — do not wait for the `*/30` cron — and run it
    from inside the TA's own app context.** `outputlookup` resolves its
    destination from the *current* app (`createinapp` defaults to true,
    `create_context` defaults to `app`). Run it from Search & Reporting and it
@@ -104,18 +111,18 @@ after minute 8.
    the Inputs tab (disable/enable), confirm `sourcetype=anthropic:api_keys |
    stats dc(id)` returns **2** (again: `dc(id)`, not `count` — the count is
    `2 × runs`), then re-run the `savedsearch` above from the TA app URL.
-8. Open the dashboard and confirm the **Unrecognized API Keys (shadow AI)**
+9. Open the dashboard and confirm the **Unrecognized API Keys (shadow AI)**
    panel shows **exactly one row — `apikey_rogue_demo`**. One row = the demo is
    armed. Zero rows or three rows = stop and fix now, not on stage. Also check
    the dashboard renders at projector resolution.
-9. `scripts/preflight.sh` — everything green except the optional Admin API check.
-10. Charge laptop; copy the backup screencast into `demo/backup_screencast.mp4`.
+10. `scripts/preflight.sh` — everything green except the optional Admin API check.
+11. Charge laptop; copy the backup screencast into `demo/backup_screencast.mp4`.
 
 ## Failure decision tree
 | Failure | Response |
 |---|---|
 | Conference Wi-Fi down | Phone hotspot. Still down → play `demo/backup_screencast.*` for minutes 4–8; everything else (Splunk + mock) is local and needs no network |
-| Claude Code stalls/derails | Narrate briefly, `git checkout demo-<next-tag>` in live-build, continue story |
+| Claude Code stalls/derails | Narrate briefly, then `../kit/rescue scaffold\|client\|inputs\|final` from the stage dir, continue story |
 | Real Admin API errors / key revoked | TA account already points at the mock — nothing to do; say "recorded responses from the real API" |
 | Splunk broken / weird UI state | `/opt/splunk/bin/splunk restart` (~60–90 s). Still broken → `/opt/splunk/bin/splunk stop; /opt/splunk/bin/splunk start`, then re-run `scripts/preflight.sh` |
 | TA not showing in the app menu | Confirm `ls /opt/splunk/etc/apps/TA_anthropic`, re-extract from `dist/`, `/opt/splunk/bin/splunk restart` |
